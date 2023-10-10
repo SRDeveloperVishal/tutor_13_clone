@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  # Web proxy for load balancing and SSL termination
+  caddy:
+    image: docker.io/caddy:2.4.6
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      default_site_port: ""
+    volumes:
+      - ../apps/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../../data/caddy:/data
+    
+
+  # MFE
+  mfe:
+      image: docker.io/overhangio/openedx-mfe:13.0.2
+      build:
+          context: ../plugins/mfe/build/mfe/
+      restart: unless-stopped
